@@ -141,7 +141,7 @@
   font-family: "Inter-Regular", Helvetica;
 }
 
-.products-preview{
+/* .products-preview{
   position: fixed;
   top:0; left:0;
   min-height: 100vh;
@@ -241,7 +241,7 @@
 .product-preview .preview .buttons a.buy:hover{
   background: #444;
   color:#fff;
-}
+} */
 
 /* For smartphone*/
 @media screen and (max-width: 770px) {
