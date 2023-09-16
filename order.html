@@ -27,7 +27,7 @@
         </div>
     </nav>
 
-    <form method="post">
+    <form method="post" id="orderForm">
         <div class="row">
             <div class="col-60">
                 <div class="personal-info">
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label class="required" for="id_city">City:</label> 
-                                    <input type="text" class="form-control" name="country" maxlength="30" id="id_city" placeholder="Ex: Jakarta"
+                                    <input type="text" class="form-control" name="city" maxlength="30" id="id_city" placeholder="Ex: Jakarta"
                                     required oninvalid="this.setCustomValidity('Data yang diisikan belum lengkap, silahkan lengkapi terlebih dahulu')" oninput="setCustomValidity('')">                              
                                 </div>
                                 <div class="form-group col-md-4">
@@ -89,17 +89,41 @@
                 <div class="ordering-product">
                     <div class="title">Product Order</div>
                     <label class="required" for="id_product_ordered">Products:</label>
-                    <select class="select-product-ordered" name="product_ordered" id="id_product_ordered" class="form-select" multiple data-search="true">
-                        <option value="apple">Apple</option>
-                        <option value="banana">Banana</option>
-                        <option value="cherry">Cherry</option>
-                        <option value="grape">Grape</option>
-                        <option value="orange">Orange</option>
-                    </select>
+                    <table class="table" id="itemsTable">
+                        <thead>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>
+                            <button class="btn btn-primary" onclick="addRow()">+</button>
+                        </th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <select class="select-product-ordered" name="product_ordered" id="id_product_ordered" class="form-control">
+                                        <option value="apple">Apple</option>
+                                        <option value="banana">Banana</option>
+                                        <option value="cherry">Cherry</option>
+                                        <option value="grape">Grape</option>
+                                        <option value="orange">Orange</option>
+                                        <option value="buahbuahbuahbuahhhh">buahbuahbuahbuahhhh</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input class="form-control" type="number" name="quantity" id="id_quantity"
+                                    required oninvalid="this.setCustomValidity('Data yang diisikan belum lengkap, silahkan lengkapi terlebih dahulu')" oninput="setCustomValidity('')">
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger" onclick="deleteRow(this)">-</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <button type="submit" class= "button" onclick="return confirm('Apakah Anda yakin untuk menyimpan formulir ini?');">Checkout</button>
                 </div> <br><br>
             </div>
         </div>
     </form>
+    <script src="order.js"></script>
 </body>
 </html>
