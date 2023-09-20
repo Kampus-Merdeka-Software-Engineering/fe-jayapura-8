@@ -1,69 +1,64 @@
+// Memilih semua elemen dengan kelas 'filter-product' (item produk) dan 'filter-btn' (tombol filter)
+const allFilterItems = document.querySelectorAll('.filter-product');
+const allFilterBtns = document.querySelectorAll('.filter-btn');
 
-// function search() {
-//   // Dapatkan nilai input pencarian
-//   const searchInput = document.getElementById("search").value.toLowerCase();
+// Menambahkan event listener untuk memastikan tombol pertama aktif saat halaman dimuat
+window.addEventListener('DOMContentLoaded', () => {
+  allFilterBtns[0].classList.add('active-btn');
+});
 
-//   // Dapatkan semua produk
-//   const products = document.querySelectorAll(".product");
+// Menambahkan event listener untuk setiap tombol filter
+allFilterBtns.forEach((btn) => {
+  btn.addEventListener('click', () => {
+      showFilteredContent(btn);
+  });
+});
 
-//   // Kosongkan hasil pencarian sebelumnya
-//   const hasilPencarian = document.getElementById("hasil-pencarian");
-//   hasilPencarian.innerHTML = "";
-
-//   // Iterasi melalui produk dan cek apakah nama produk cocok dengan pencarian
-//   products.forEach((product) => {
-//     const productName = product.querySelector("p").textContent.toLowerCase();
-
-//     if (productName.includes(searchInput)) {
-//       // Jika cocok, tambahkan produk ke hasil pencarian
-//       hasilPencarian.appendChild(product.cloneNode(true));
-//     }
-//   });
-
-//   // Jika tidak ada hasil pencarian, tampilkan pesan "Tidak ditemukan"
-//   if (hasilPencarian.children.length === 0) {
-//     hasilPencarian.textContent = "Tidak ditemukan.";
-//   }
-// }
-function search(){
-  let filter = document.getElementById('find').value.toUpperCase();
-
-  let item = document.querySelectorAll('.product');
-
-  let l = document.getElementsByTagName('p');
-
-  for(var i = 0; i<=l.length; i++){
-    let a=item[i].getElementsByTagName('p')[0];
-
-    let value=a.innerHTML || a.innerText || a.textContent;
-
-    if(value.toUpperCase().indexOf(filter) > -1){
-      item[i].style.display="";
-    } else {
-      item[i].style.display="none";
-    }
-  }
+// Fungsi untuk menampilkan konten yang sesuai dengan tombol filter yang diklik
+function showFilteredContent(btn){
+  allFilterItems.forEach((item) => {
+    // Memeriksa apakah elemen produk memiliki kelas yang sesuai dengan tombol filter yang diklik
+      if(item.classList.contains(btn.id)){
+          resetActiveBtn(); // Mereset status aktif pada semua tombol filter
+          btn.classList.add('active-btn'); // Menandai tombol filter yang aktif
+          item.style.display = "block"; // Menampilkan elemen produk
+      } else {
+          item.style.display = "none"; // Menyembunyikan elemen produk yang tidak sesuai
+      }
+  });
 }
 
-// let preveiwContainer = document.querySelector('.product-preview');
-// let previewBox = preveiwContainer.querySelectorAll('.preview');
+// Fungsi untuk mereset status aktif pada semua tombol filter
+function resetActiveBtn(){
+  allFilterBtns.forEach((btn) => {
+      btn.classList.remove('active-btn'); // Menghapus kelas 'active-btn' dari semua tombol filter
+  });
+}
 
-// document.querySelectorAll('.product-catalog .product').forEach(product =>{
-//   product.onclick = () =>{
-//     preveiwContainer.style.display = 'flex-wrap';
-//     let name = product.getAttribute('data-name');
-//     previewBox.forEach(preview =>{
-//       let target = preview.getAttribute('data-target');
-//       if(name == target){
-//         preview.classList.add('active');
-//       }
-//     });
-//   };
-// });
+// Mendapatkan elemen input pencarian
+const searchInput = document.getElementById('find');
 
-// previewBox.forEach(close =>{
-//   close.querySelector('.fa-times').onclick = () =>{
-//     close.classList.remove('active');
-//     preveiwContainer.style.display = 'none';
-//   };
-// });
+// Mendapatkan semua elemen produk
+const allProducts = document.querySelectorAll('.filter-product');
+
+// Menambahkan event listener untuk input pencarian saat pengguna mengetik
+searchInput.addEventListener('input', () => {
+  searchProducts();
+});
+
+// Fungsi untuk melakukan pencarian produk
+function searchProducts() {
+  const filter = searchInput.value.trim().toLowerCase();
+
+  // Iterasi melalui semua elemen produk
+  allProducts.forEach((product) => {
+    const productName = product.querySelector('h3').innerText.toLowerCase();
+
+    // Memeriksa apakah nama produk mengandung kata kunci pencarian
+    if (productName.includes(filter)) {
+      product.style.display = 'block'; // Menampilkan produk jika cocok
+    } else {
+      product.style.display = 'none'; // Menyembunyikan produk jika tidak cocok
+    }
+  });
+}
