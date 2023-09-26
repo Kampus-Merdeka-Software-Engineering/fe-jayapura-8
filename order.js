@@ -1,19 +1,56 @@
 const orderForm = document.getElementById("orderForm");
+const productsData = [
+  {
+    id: 1,
+    name: "Anggur",
+    imageSrc: "img/anggur.png",
+    price: "$3.99",
+    stars: 5,
+    categories: ["all"],
+  },
+  {
+    id: 2,
+    name: "Fresh Orange",
+    imageSrc: "img/jeruk.png",
+    price: "$3.99",
+    stars: 5,
+    categories: ["all", "new"],
+  },
+  {
+    id: 3,
+    name: "Watermelon",
+    imageSrc: "img/semangka.png",
+    price: "$3.99",
+    stars: 4.5,
+    categories: ["all", "new", "best-sellers"],
+  },
+  {
+    id: 4,
+    name: "Salak",
+    imageSrc: "img/salak.png",
+    price: "$4.99",
+    stars: 4,
+    categories: ["all", "new", "best-sellers", "specials"],
+  }
+];
 
 //Function untuk add row dalam table items yang ingin dibeli user
 function addRow() {
   const tableBody = document.querySelector("tbody");
   const newRow = document.createElement("tr");
 
+  // Create an empty string to store the options HTML
+  let optionsHTML = '';
+
+  // Iterate through the productsData array and generate options with 'id' as value
+  for (const product of productsData) {
+    optionsHTML += `<option value="${product.name}">${product.name}</option>`;
+  }
+
   newRow.innerHTML = `
     <td>
       <select class="select-product-ordered" name="product_ordered" class="form-control">
-        <option value="apple">Apple</option>
-        <option value="banana">Banana</option>
-        <option value="cherry">Cherry</option>
-        <option value="grape">Grape</option>
-        <option value="orange">Orange</option>
-        <option value="buahbuahbuahbuahhhh">buahbuahbuahbuahhhh</option>
+        ${optionsHTML} <!-- Insert generated options here -->
       </select>
     </td>
     <td>
@@ -24,6 +61,26 @@ function addRow() {
       <button class="btn btn-danger" onclick="deleteRow(this)">-</button>
     </td>
   `;
+
+  // newRow.innerHTML = `
+  //   <td>
+  //     <select class="select-product-ordered" name="product_ordered" class="form-control">
+  //       <option value="apple">Apple</option>
+  //       <option value="banana">Banana</option>
+  //       <option value="cherry">Cherry</option>
+  //       <option value="grape">Grape</option>
+  //       <option value="orange">Orange</option>
+  //       <option value="buahbuahbuahbuahhhh">buahbuahbuahbuahhhh</option>
+  //     </select>
+  //   </td>
+  //   <td>
+  //     <input class="form-control" type="number" name="quantity"
+  //       required oninvalid="this.setCustomValidity('Data yang diisikan belum lengkap, silahkan lengkapi terlebih dahulu')" oninput="setCustomValidity('')">
+  //   </td>
+  //   <td>
+  //     <button class="btn btn-danger" onclick="deleteRow(this)">-</button>
+  //   </td>
+  // `;
 
   tableBody.appendChild(newRow);
 }
@@ -53,10 +110,21 @@ function handleSubmit(event) {
   // memasukan items yang dipilih user ke dalam "items"
   const itemsTable = document.getElementById("itemsTable").getElementsByTagName('tbody')[0];
   const items = [];
+
   for (let i = 0; i < itemsTable.rows.length; i++) {
-    const productName = itemsTable.rows[i].cells[0].querySelector("select").value;
-    const quantity = itemsTable.rows[i].cells[1].querySelector("input").value;
-    items.push({ productName, quantity });
+    const selectElement = itemsTable.rows[i].cells[0].querySelector("select");
+
+    // Check if the row and the first cell with a select element exist
+    if (itemsTable.rows[i] && selectElement) {
+      const quantityElement = itemsTable.rows[i].cells[1].querySelector("input");
+
+      // Check if the second cell with an input element exists
+      if (quantityElement) {
+        const productName = selectElement.value;
+        const quantity = quantityElement.value;
+        items.push({ productName, quantity });
+      }
+    }
   }
 
   //order object
