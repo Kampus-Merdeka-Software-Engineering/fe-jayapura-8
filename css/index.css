@@ -1,7 +1,7 @@
 .home-container {
   /* background-color: #aca394; */
   min-height: 100vh;
-  background-image: url('img/unsplash-vctdb93yiqy.png');
+  background-image: url('../img/unsplash-vctdb93yiqy.png');
   background-repeat: no-repeat; /* Prevent the image from repeating */
   /* background-size: 100%; */
   background-position: center center;

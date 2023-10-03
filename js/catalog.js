@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       id: 1,
       name: "Beach Shirt #01",
-      imageSrc: "img/f1.jpg",
+      imageSrc: "../img/f1.jpg",
       price: "$15.99",
       stars: 5,
       categories: ["all", "best-sellers"],
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       id: 2,
       name: "Beach Shirt #02",
-      imageSrc: "img/f2.jpg",
+      imageSrc: "../img/f2.jpg",
       price: "$13.99",
       stars: 4.5,
       categories: ["all", "new"],
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       id: 3,
       name: "Beach Shirt #03",
-      imageSrc: "img/f3.jpg",
+      imageSrc: "../img/f3.jpg",
       price: "$14.99",
       stars: 4.5,
       categories: ["all", "new", "best-sellers"],
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       id: 4,
       name: "Beach Shirt #04",
-      imageSrc: "img/f4.jpg",
+      imageSrc: "../img/f4.jpg",
       price: "$14.99",
       stars: 4.5,
       categories: ["all", "new", "best-sellers"],
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       id: 5,
       name: "Beach Shirt #05",
-      imageSrc: "img/f5.jpg",
+      imageSrc: "../img/f5.jpg",
       price: "$15.99",
       stars: 4,
       categories: ["all", "new"],
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       id: 6,
       name: "Flower Trouser",
-      imageSrc: "img/f7.jpg",
+      imageSrc: "../img/f7.jpg",
       price: "$21.99",
       stars: 5,
       categories: ["all", "best-sellers", "specials"],
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       id: 7,
       name: "Windy Shirt",
-      imageSrc: "img/f8.jpg",
+      imageSrc: "../img/f8.jpg",
       price: "$14.99",
       stars: 5,
       categories: ["all", "best-sellers", "specials"],
@@ -64,12 +64,28 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       id: 8,
       name: "Grey Short Super Fluffy",
-      imageSrc: "img/n6.jpg",
+      imageSrc: "../img/n6.jpg",
       price: "$19.99",
       stars: 4,
       categories: ["all", "best-sellers", "specials"],
     },
   ];
+
+  // Fetch data untuk header
+// function fetchproductsData() {
+//   fetch('http://localhost:3000/products')
+//       .then(response => response.json())
+//       .then(data => {
+//           const headerElement = document.querySelector('header .filter-products');
+//           headerElement.querySelector('h3').textContent = data.name;
+//           const productsData = data;
+//           // headerElement.querySelector('p').textContent = data.description;
+//       })
+//       .catch(error => console.error('Error fetching header data:', error));
+//       return productsData;
+// }
+
+// document.addEventListener('DOMContentLoaded', fetchproductsData);
 
   // Fungsi untuk membuat HTML untuk satu produk
   function createProduct(product) {
@@ -92,6 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
     productsContainer.innerHTML = ""; // Kosongkan container produk
 
     // Loop melalui data produk
+    // const productsData = fetchproductsData()
     productsData.forEach((product) => {
       // Tampilkan produk jika kategori sesuai dengan yang dipilih atau "all"
       if (category === "all" || product.categories.includes(category)) {
@@ -114,16 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Tampilkan semua produk saat halaman pertama kali dimuat
   displayProducts("all");
-});
-
-// Fungsi untuk mereset status aktif pada semua tombol filter
-function resetActiveBtn(){
-  allFilterBtns.forEach((btn) => {
-      btn.classList.remove('active-btn'); // Menghapus kelas 'active-btn' dari semua tombol filter
-  });
-}
-
-// Mendapatkan elemen input pencarian
+  // Mendapatkan elemen input pencarian
 const searchInput = document.getElementById('find');
 
 // Mendapatkan semua elemen produk
@@ -148,5 +156,13 @@ function searchProducts() {
     } else {
       product.style.display = 'none'; // Menyembunyikan produk jika tidak cocok
     }
+  });
+}
+});
+
+// Fungsi untuk mereset status aktif pada semua tombol filter
+function resetActiveBtn(){
+  allFilterBtns.forEach((btn) => {
+      btn.classList.remove('active-btn'); // Menghapus kelas 'active-btn' dari semua tombol filter
   });
 }
