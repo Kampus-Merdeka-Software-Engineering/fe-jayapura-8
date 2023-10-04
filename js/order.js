@@ -169,7 +169,7 @@ function handleSubmit(event) {
   console.log(order);
 
   // Redirect ke home page
-//   window.location.href = 'index.html';
+  window.location.href = 'ordersuccess.html';
 }
 
 // event handler untuk submit form
