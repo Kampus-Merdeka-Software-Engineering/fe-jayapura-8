@@ -94,26 +94,6 @@ function addRow() {
     </td>
   `;
 
-  // newRow.innerHTML = `
-  //   <td>
-  //     <select class="select-product-ordered" name="product_ordered" class="form-control">
-  //       <option value="apple">Apple</option>
-  //       <option value="banana">Banana</option>
-  //       <option value="cherry">Cherry</option>
-  //       <option value="grape">Grape</option>
-  //       <option value="orange">Orange</option>
-  //       <option value="buahbuahbuahbuahhhh">buahbuahbuahbuahhhh</option>
-  //     </select>
-  //   </td>
-  //   <td>
-  //     <input class="form-control" type="number" name="quantity"
-  //       required oninvalid="this.setCustomValidity('Data yang diisikan belum lengkap, silahkan lengkapi terlebih dahulu')" oninput="setCustomValidity('')">
-  //   </td>
-  //   <td>
-  //     <button class="btn btn-danger" onclick="deleteRow(this)">-</button>
-  //   </td>
-  // `;
-
   tableBody.appendChild(newRow);
 }
 
@@ -149,14 +129,19 @@ function handleSubmit(event) {
     // Check if the row and the first cell with a select element exist
     if (itemsTable.rows[i] && selectElement) {
       const quantityElement = itemsTable.rows[i].cells[1].querySelector("input");
-      const priceElement = itemsTable.rows[i].cells[3].querySelector("input");
 
       // Check if the second cell with an input element exists
       if (quantityElement) {
-        const productName = selectElement.value;
+        const productId = selectElement.value;
         const quantity = quantityElement.value;
-        const total_price_item = priceElement.value * quantity;
-        items.push({ productName, quantity, total_price_item});
+        // Find the product in the productsData array based on productId
+        const selectedProduct = productsData.find(product => product.id === parseInt(productId));
+
+        if (selectedProduct) {
+          // Calculate the total price for this item (product price * quantity)
+          const total_price_item = selectedProduct.price * quantity;
+          items.push({ productId, quantity, total_price_item});
+        }
       }
     }
   }
