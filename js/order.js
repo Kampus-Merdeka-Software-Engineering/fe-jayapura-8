@@ -4,7 +4,7 @@ const productsData = [
     id: 1,
     name: "Beach Shirt #01",
     imageSrc: "img/f1.jpg",
-    price: "$15.99",
+    price: 15.99,
     stars: 5,
     categories: ["all", "best-sellers"],
   },
@@ -12,7 +12,7 @@ const productsData = [
     id: 2,
     name: "Beach Shirt #02",
     imageSrc: "img/f2.jpg",
-    price: "$13.99",
+    price: 13.99,
     stars: 4.5,
     categories: ["all", "new"],
   },
@@ -20,7 +20,7 @@ const productsData = [
     id: 3,
     name: "Beach Shirt #03",
     imageSrc: "img/f3.jpg",
-    price: "$14.99",
+    price: 14.99,
     stars: 4.5,
     categories: ["all", "new", "best-sellers"],
   },
@@ -28,7 +28,7 @@ const productsData = [
     id: 4,
     name: "Beach Shirt #04",
     imageSrc: "img/f4.jpg",
-    price: "$14.99",
+    price: 14.99,
     stars: 4.5,
     categories: ["all", "new", "best-sellers"],
   },
@@ -36,7 +36,7 @@ const productsData = [
     id: 5,
     name: "Beach Shirt #05",
     imageSrc: "img/f5.jpg",
-    price: "$15.99",
+    price: 15.99,
     stars: 4,
     categories: ["all", "new"],
   },
@@ -44,7 +44,7 @@ const productsData = [
     id: 6,
     name: "Flower Trouser",
     imageSrc: "img/f7.jpg",
-    price: "$21.99",
+    price: 21.99,
     stars: 5,
     categories: ["all", "best-sellers", "specials"],
   },
@@ -52,7 +52,7 @@ const productsData = [
     id: 7,
     name: "Windy Shirt",
     imageSrc: "img/f8.jpg",
-    price: "$14.99",
+    price: 12.99,
     stars: 5,
     categories: ["all", "best-sellers", "specials"],
   },
@@ -60,7 +60,7 @@ const productsData = [
     id: 8,
     name: "Grey Short Super Fluffy",
     imageSrc: "img/n6.jpg",
-    price: "$19.99",
+    price: 19.99,
     stars: 4,
     categories: ["all", "best-sellers", "specials"],
   },
@@ -76,7 +76,7 @@ function addRow() {
 
   // Iterate through the productsData array and generate options with 'id' as value
   for (const product of productsData) {
-    optionsHTML += `<option value="${product.name}">${product.name}</option>`;
+    optionsHTML += `<option value="${product.id}">${product.name}</option>`;
   }
 
   newRow.innerHTML = `
@@ -149,12 +149,14 @@ function handleSubmit(event) {
     // Check if the row and the first cell with a select element exist
     if (itemsTable.rows[i] && selectElement) {
       const quantityElement = itemsTable.rows[i].cells[1].querySelector("input");
+      const priceElement = itemsTable.rows[i].cells[3].querySelector("input");
 
       // Check if the second cell with an input element exists
       if (quantityElement) {
         const productName = selectElement.value;
         const quantity = quantityElement.value;
-        items.push({ productName, quantity });
+        const total_price_item = priceElement.value * quantity;
+        items.push({ productName, quantity, total_price_item});
       }
     }
   }

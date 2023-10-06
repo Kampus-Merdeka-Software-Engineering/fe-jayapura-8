@@ -2,73 +2,73 @@ document.addEventListener("DOMContentLoaded", function () {
   // Seleksi elemen HTML dengan class "filter-products"
   const productsContainer = document.querySelector(".filter-products");
 
-  // Data produk dalam bentuk array objek
-  const productsData = [
-    {
-      id: 1,
-      name: "Beach Shirt #01",
-      imageSrc: "../img/f1.jpg",
-      price: "$15.99",
-      stars: 5,
-      categories: ["all", "best-sellers"],
-    },
-    {
-      id: 2,
-      name: "Beach Shirt #02",
-      imageSrc: "../img/f2.jpg",
-      price: "$13.99",
-      stars: 4.5,
-      categories: ["all", "new"],
-    },
-    {
-      id: 3,
-      name: "Beach Shirt #03",
-      imageSrc: "../img/f3.jpg",
-      price: "$14.99",
-      stars: 4.5,
-      categories: ["all", "new", "best-sellers"],
-    },
-    {
-      id: 4,
-      name: "Beach Shirt #04",
-      imageSrc: "../img/f4.jpg",
-      price: "$14.99",
-      stars: 4.5,
-      categories: ["all", "new", "best-sellers"],
-    },
-    {
-      id: 5,
-      name: "Beach Shirt #05",
-      imageSrc: "../img/f5.jpg",
-      price: "$15.99",
-      stars: 4,
-      categories: ["all", "new"],
-    },
-    {
-      id: 6,
-      name: "Flower Trouser",
-      imageSrc: "../img/f7.jpg",
-      price: "$21.99",
-      stars: 5,
-      categories: ["all", "best-sellers", "specials"],
-    },
-    {
-      id: 7,
-      name: "Windy Shirt",
-      imageSrc: "../img/f8.jpg",
-      price: "$14.99",
-      stars: 5,
-      categories: ["all", "best-sellers", "specials"],
-    },
-    {
-      id: 8,
-      name: "Grey Short Super Fluffy",
-      imageSrc: "../img/n6.jpg",
-      price: "$19.99",
-      stars: 4,
-      categories: ["all", "best-sellers", "specials"],
-    },
-  ];
+  // // Data produk dalam bentuk array objek
+  // const productsData = [
+  //   {
+  //     id: 1,
+  //     name: "Beach Shirt #01",
+  //     imageSrc: "../img/f1.jpg",
+  //     price: "$15.99",
+  //     stars: 5,
+  //     categories: ["all", "best-sellers"],
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Beach Shirt #02",
+  //     imageSrc: "../img/f2.jpg",
+  //     price: "$13.99",
+  //     stars: 4.5,
+  //     categories: ["all", "new"],
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Beach Shirt #03",
+  //     imageSrc: "../img/f3.jpg",
+  //     price: "$14.99",
+  //     stars: 4.5,
+  //     categories: ["all", "new", "best-sellers"],
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Beach Shirt #04",
+  //     imageSrc: "../img/f4.jpg",
+  //     price: "$14.99",
+  //     stars: 4.5,
+  //     categories: ["all", "new", "best-sellers"],
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Beach Shirt #05",
+  //     imageSrc: "../img/f5.jpg",
+  //     price: "$15.99",
+  //     stars: 4,
+  //     categories: ["all", "new"],
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Flower Trouser",
+  //     imageSrc: "../img/f7.jpg",
+  //     price: "$21.99",
+  //     stars: 5,
+  //     categories: ["all", "best-sellers", "specials"],
+  //   },
+  //   {
+  //     id: 7,
+  //     name: "Windy Shirt",
+  //     imageSrc: "../img/f8.jpg",
+  //     price: "$14.99",
+  //     stars: 5,
+  //     categories: ["all", "best-sellers", "specials"],
+  //   },
+  //   {
+  //     id: 8,
+  //     name: "Grey Short Super Fluffy",
+  //     imageSrc: "../img/n6.jpg",
+  //     price: "$19.99",
+  //     stars: 4,
+  //     categories: ["all", "best-sellers", "specials"],
+  //   },
+  // ];
 
   // Fungsi untuk membuat HTML untuk satu produk
   function createProduct(product) {
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="filter-product ${product.categories.join(" ")}">
         <img src="${product.imageSrc}" alt="${product.name}">
         <h3>${product.name}</h3>
-        <div class="price">${product.price}</div>
+        <div class="price">$${product.price}</div>
         <div class="stars">
           ${"<i class='fas fa-star'></i>".repeat(Math.floor(product.stars))}
           ${
@@ -94,20 +94,30 @@ document.addEventListener("DOMContentLoaded", function () {
   function displayProducts(category, searchFilter) {
     productsContainer.innerHTML = ""; // Kosongkan container produk
 
-    // Loop melalui data produk
-    productsData.forEach((product) => {
-      // Ambil nama produk dalam huruf kecil untuk pencarian
-      const productName = product.name.toLowerCase();
-      const categoryMatch =
-        category === "all" || product.categories.includes(category);
-      const searchMatch = productName.includes(searchFilter);
+    // Fetch data produk dari localhost:3000/products
+    fetch("http://localhost:3000/products")
+      .then((response) => response.json())
+      .then((data) => {
+        const productsData = data.productsData;
 
-      // Tampilkan produk jika sesuai dengan kategori dan pencarian
-      if (categoryMatch && searchMatch) {
-        const productHTML = createProduct(product);
-        productsContainer.innerHTML += productHTML;
-      }
-    });
+        // Loop melalui data produk
+        productsData.forEach((product) => {
+          // Ambil nama produk dalam huruf kecil untuk pencarian
+          const productName = product.name.toLowerCase();
+          const categoryMatch =
+            category === "all" || product.categories.includes(category);
+          const searchMatch = productName.includes(searchFilter);
+
+          // Tampilkan produk jika sesuai dengan kategori dan pencarian
+          if (categoryMatch && searchMatch) {
+            const productHTML = createProduct(product);
+            productsContainer.innerHTML += productHTML;
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }
 
   // Seleksi semua tombol filter dengan class "filter-btn"
