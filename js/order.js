@@ -1,70 +1,4 @@
 const orderForm = document.getElementById("orderForm");
-const productsData = [
-  {
-    id: 1,
-    name: "Beach Shirt #01",
-    imageSrc: "img/f1.jpg",
-    price: 15.99,
-    stars: 5,
-    categories: ["all", "best-sellers"],
-  },
-  {
-    id: 2,
-    name: "Beach Shirt #02",
-    imageSrc: "img/f2.jpg",
-    price: 13.99,
-    stars: 4.5,
-    categories: ["all", "new"],
-  },
-  {
-    id: 3,
-    name: "Beach Shirt #03",
-    imageSrc: "img/f3.jpg",
-    price: 14.99,
-    stars: 4.5,
-    categories: ["all", "new", "best-sellers"],
-  },
-  {
-    id: 4,
-    name: "Beach Shirt #04",
-    imageSrc: "img/f4.jpg",
-    price: 14.99,
-    stars: 4.5,
-    categories: ["all", "new", "best-sellers"],
-  },
-  {
-    id: 5,
-    name: "Beach Shirt #05",
-    imageSrc: "img/f5.jpg",
-    price: 15.99,
-    stars: 4,
-    categories: ["all", "new"],
-  },
-  {
-    id: 6,
-    name: "Flower Trouser",
-    imageSrc: "img/f7.jpg",
-    price: 21.99,
-    stars: 5,
-    categories: ["all", "best-sellers", "specials"],
-  },
-  {
-    id: 7,
-    name: "Windy Shirt",
-    imageSrc: "img/f8.jpg",
-    price: 12.99,
-    stars: 5,
-    categories: ["all", "best-sellers", "specials"],
-  },
-  {
-    id: 8,
-    name: "Grey Short Super Fluffy",
-    imageSrc: "img/n6.jpg",
-    price: 19.99,
-    stars: 4,
-    categories: ["all", "best-sellers", "specials"],
-  },
-];
 
 //Function untuk add row dalam table items yang ingin dibeli user
 function addRow() {
@@ -73,6 +7,12 @@ function addRow() {
 
   // Create an empty string to store the options HTML
   let optionsHTML = '';
+
+  // Fetch data produk dari localhost:3000/products
+  fetch("https://be-jayapura-8-aurevoir.up.railway.app/products")
+  .then((response) => response.json())
+  .then((data) => {
+    const productsData = data.productsData;
 
   // Iterate through the productsData array and generate options with 'id' as value
   for (const product of productsData) {
@@ -93,6 +33,10 @@ function addRow() {
       <button class="btn btn-danger" onclick="deleteRow(this)">-</button>
     </td>
   `;
+})
+.catch((error) => {
+  console.error("Error fetching data:", error);
+});
 
   tableBody.appendChild(newRow);
 }
@@ -146,11 +90,55 @@ function handleSubmit(event) {
     }
   }
 
+  // Function to send the order to the backend
+function sendOrderToBackend(orderData) {
+  fetch('https://be-jayapura-8-aurevoir.up.railway.app/orders', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(orderData),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data.message); // Output the response from the server
+      // You can redirect the user or perform other actions based on the server response
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      // Handle errors gracefully
+    });
+}
+
+// In your handleSubmit function, after constructing the `order` object:
+// ...
+
+// Call the sendOrderToBackend function with the order data
+sendOrderToBackend(order);
+
   //order object
   const order = {
     personalInfo,
     items,
   };
+
+  fetch('/orders', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(order), // Send the order object as JSON
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      // Handle the response from the server (e.g., show a success message)
+      console.log(data);
+      // Redirect to a success page or take other actions as needed
+    })
+    .catch((error) => {
+      // Handle errors gracefully
+      console.error('Error:', error);
+    });
 
   // Log order pada console
   console.log(order);
