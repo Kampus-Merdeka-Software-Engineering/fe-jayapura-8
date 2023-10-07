@@ -1,6 +1,6 @@
 const orderForm = document.getElementById("orderForm");
-
-//Function untuk add row dalam table items yang ingin dibeli user
+const productsData = [];
+// Function untuk add row dalam table items yang ingin dibeli user
 function addRow() {
   const tableBody = document.querySelector("tbody");
   const newRow = document.createElement("tr");
@@ -14,29 +14,29 @@ function addRow() {
   .then((data) => {
     const productsData = data.productsData;
 
-  // Iterate through the productsData array and generate options with 'id' as value
-  for (const product of productsData) {
-    optionsHTML += `<option value="${product.id}">${product.name}</option>`;
-  }
+    // Iterate through the productsData array and generate options with 'id' as value
+    for (const product of productsData) {
+      optionsHTML += `<option value="${product.id}">${product.name}</option>`;
+    }
 
-  newRow.innerHTML = `
-    <td>
-      <select class="select-product-ordered" name="product_ordered" class="form-control">
-        ${optionsHTML} <!-- Insert generated options here -->
-      </select>
-    </td>
-    <td>
-      <input class="form-control" type="number" name="quantity"
-        required oninvalid="this.setCustomValidity('Data yang diisikan belum lengkap, silahkan lengkapi terlebih dahulu')" oninput="setCustomValidity('')">
-    </td>
-    <td>
-      <button class="btn btn-danger" onclick="deleteRow(this)">-</button>
-    </td>
-  `;
-})
-.catch((error) => {
-  console.error("Error fetching data:", error);
-});
+    newRow.innerHTML = `
+      <td>
+        <select class="select-product-ordered" name="product_ordered" class="form-control">
+          ${optionsHTML} <!-- Insert generated options here -->
+        </select>
+      </td>
+      <td>
+        <input class="form-control" type="number" name="quantity"
+          required oninvalid="this.setCustomValidity('Data yang diisikan belum lengkap, silahkan lengkapi terlebih dahulu')" oninput="setCustomValidity('')">
+      </td>
+      <td>
+        <button class="btn btn-danger" onclick="deleteRow(this)">-</button>
+      </td>
+    `;
+  })
+  .catch((error) => {
+    console.error("Error fetching data:", error);
+  });
 
   tableBody.appendChild(newRow);
 }
@@ -47,11 +47,34 @@ function deleteRow(button) {
   tableRow.remove();
 }
 
-// Function untuk handle submisi form (ketika user klik tombol checkout)
-function handleSubmit(event) {
-  event.preventDefault(); // mencegah default form submission
+// Function untuk mengirim pesanan ke server
+async function sendOrderToServer(order) {
+  try {
+    const response = await fetch("https://be-jayapura-8-aurevoir.up.railway.app/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(order),
+    });
 
-  // memasukan personal info yang dimasukkan user ke dalam "personalInfo"
+    if (response.ok) {
+      const responseData = await response.json();
+      return responseData.order_id;
+    } else {
+      throw new Error("Failed to create order on the server");
+    }
+  } catch (error) {
+    console.error("Error sending order:", error);
+    throw error;
+  }
+}
+
+// Function untuk handle submisi form (ketika user klik tombol checkout)
+async function handleSubmit(event) {
+  event.preventDefault(); // Mencegah default form submission
+
+  // Memasukkan personal info yang dimasukkan user ke dalam "personalInfo"
   const personalInfo = {
     firstName: document.getElementById("id_first_name").value,
     lastName: document.getElementById("id_last_name").value,
@@ -63,7 +86,7 @@ function handleSubmit(event) {
     zip: document.getElementById("id_zip").value,
   };
 
-  // memasukan items yang dipilih user ke dalam "items"
+  // Memasukkan items yang dipilih user ke dalam "items"
   const itemsTable = document.getElementById("itemsTable").getElementsByTagName('tbody')[0];
   const items = [];
 
@@ -74,77 +97,42 @@ function handleSubmit(event) {
     if (itemsTable.rows[i] && selectElement) {
       const quantityElement = itemsTable.rows[i].cells[1].querySelector("input");
 
-      // Check if the second cell with an input element exists
       if (quantityElement) {
         const productId = selectElement.value;
         const quantity = quantityElement.value;
-        // Find the product in the productsData array based on productId
         const selectedProduct = productsData.find(product => product.id === parseInt(productId));
 
         if (selectedProduct) {
-          // Calculate the total price for this item (product price * quantity)
           const total_price_item = selectedProduct.price * quantity;
-          items.push({ productId, quantity, total_price_item});
+          const item = {
+            productId,
+            quantity,
+            total_price_item,
+          };
+          items.push(item);
         }
       }
     }
   }
 
-  // Function to send the order to the backend
-function sendOrderToBackend(orderData) {
-  fetch('https://be-jayapura-8-aurevoir.up.railway.app/orders', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(orderData),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data.message); // Output the response from the server
-      // You can redirect the user or perform other actions based on the server response
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      // Handle errors gracefully
-    });
-}
-
-// In your handleSubmit function, after constructing the `order` object:
-// ...
-
-// Call the sendOrderToBackend function with the order data
-sendOrderToBackend(order);
-
-  //order object
+  // Order object
   const order = {
     personalInfo,
     items,
   };
 
-  fetch('/orders', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(order), // Send the order object as JSON
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // Handle the response from the server (e.g., show a success message)
-      console.log(data);
-      // Redirect to a success page or take other actions as needed
-    })
-    .catch((error) => {
-      // Handle errors gracefully
-      console.error('Error:', error);
-    });
+  try {
+    const order_id = await sendOrderToServer(order);
 
-  // Log order pada console
-  console.log(order);
+    // Log order_id pada console (order_id yang diterima dari server)
+    console.log("Order ID:", order_id);
 
-  // Redirect ke home page
-  window.location.href = 'ordersuccess.html';
+    // Redirect ke halaman sukses dengan menyertakan order_id
+    window.location.href = `ordersuccess.html?order_id=${order_id}`;
+  } catch (error) {
+    // Handle error, misalnya dengan menampilkan pesan kesalahan kepada pengguna
+    console.error("Failed to send order:", error);
+  }
 }
 
 // event handler untuk submit form
