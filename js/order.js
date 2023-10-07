@@ -1,72 +1,6 @@
 const orderForm = document.getElementById("orderForm");
-const productsData = [
-  {
-    id: 1,
-    name: "Beach Shirt #01",
-    imageSrc: "img/f1.jpg",
-    price: 15.99,
-    stars: 5,
-    categories: ["all", "best-sellers"],
-  },
-  {
-    id: 2,
-    name: "Beach Shirt #02",
-    imageSrc: "img/f2.jpg",
-    price: 13.99,
-    stars: 4.5,
-    categories: ["all", "new"],
-  },
-  {
-    id: 3,
-    name: "Beach Shirt #03",
-    imageSrc: "img/f3.jpg",
-    price: 14.99,
-    stars: 4.5,
-    categories: ["all", "new", "best-sellers"],
-  },
-  {
-    id: 4,
-    name: "Beach Shirt #04",
-    imageSrc: "img/f4.jpg",
-    price: 14.99,
-    stars: 4.5,
-    categories: ["all", "new", "best-sellers"],
-  },
-  {
-    id: 5,
-    name: "Beach Shirt #05",
-    imageSrc: "img/f5.jpg",
-    price: 15.99,
-    stars: 4,
-    categories: ["all", "new"],
-  },
-  {
-    id: 6,
-    name: "Flower Trouser",
-    imageSrc: "img/f7.jpg",
-    price: 21.99,
-    stars: 5,
-    categories: ["all", "best-sellers", "specials"],
-  },
-  {
-    id: 7,
-    name: "Windy Shirt",
-    imageSrc: "img/f8.jpg",
-    price: 12.99,
-    stars: 5,
-    categories: ["all", "best-sellers", "specials"],
-  },
-  {
-    id: 8,
-    name: "Grey Short Super Fluffy",
-    imageSrc: "img/n6.jpg",
-    price: 19.99,
-    stars: 4,
-    categories: ["all", "best-sellers", "specials"],
-  },
-];
-
-//Function untuk add row dalam table items yang ingin dibeli user
+const productsData = [];
+// Function untuk add row dalam table items yang ingin dibeli user
 function addRow() {
   const tableBody = document.querySelector("tbody");
   const newRow = document.createElement("tr");
@@ -74,25 +8,35 @@ function addRow() {
   // Create an empty string to store the options HTML
   let optionsHTML = '';
 
-  // Iterate through the productsData array and generate options with 'id' as value
-  for (const product of productsData) {
-    optionsHTML += `<option value="${product.id}">${product.name}</option>`;
-  }
+  // Fetch data produk dari localhost:3000/products
+  fetch("https://be-jayapura-8-aurevoir.up.railway.app/products")
+  .then((response) => response.json())
+  .then((data) => {
+    const productsData = data.productsData;
 
-  newRow.innerHTML = `
-    <td>
-      <select class="select-product-ordered" name="product_ordered" class="form-control">
-        ${optionsHTML} <!-- Insert generated options here -->
-      </select>
-    </td>
-    <td>
-      <input class="form-control" type="number" name="quantity"
-        required oninvalid="this.setCustomValidity('Data yang diisikan belum lengkap, silahkan lengkapi terlebih dahulu')" oninput="setCustomValidity('')">
-    </td>
-    <td>
-      <button class="btn btn-danger" onclick="deleteRow(this)">-</button>
-    </td>
-  `;
+    // Iterate through the productsData array and generate options with 'id' as value
+    for (const product of productsData) {
+      optionsHTML += `<option value="${product.id}">${product.name}</option>`;
+    }
+
+    newRow.innerHTML = `
+      <td>
+        <select class="select-product-ordered" name="product_ordered" class="form-control">
+          ${optionsHTML} <!-- Insert generated options here -->
+        </select>
+      </td>
+      <td>
+        <input class="form-control" type="number" name="quantity"
+          required oninvalid="this.setCustomValidity('Data yang diisikan belum lengkap, silahkan lengkapi terlebih dahulu')" oninput="setCustomValidity('')">
+      </td>
+      <td>
+        <button class="btn btn-danger" onclick="deleteRow(this)">-</button>
+      </td>
+    `;
+  })
+  .catch((error) => {
+    console.error("Error fetching data:", error);
+  });
 
   tableBody.appendChild(newRow);
 }
@@ -103,11 +47,34 @@ function deleteRow(button) {
   tableRow.remove();
 }
 
-// Function untuk handle submisi form (ketika user klik tombol checkout)
-function handleSubmit(event) {
-  event.preventDefault(); // mencegah default form submission
+// Function untuk mengirim pesanan ke server
+async function sendOrderToServer(order) {
+  try {
+    const response = await fetch("https://be-jayapura-8-aurevoir.up.railway.app/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(order),
+    });
 
-  // memasukan personal info yang dimasukkan user ke dalam "personalInfo"
+    if (response.ok) {
+      const responseData = await response.json();
+      return responseData.order_id;
+    } else {
+      throw new Error("Failed to create order on the server");
+    }
+  } catch (error) {
+    console.error("Error sending order:", error);
+    throw error;
+  }
+}
+
+// Function untuk handle submisi form (ketika user klik tombol checkout)
+async function handleSubmit(event) {
+  event.preventDefault(); // Mencegah default form submission
+
+  // Memasukkan personal info yang dimasukkan user ke dalam "personalInfo"
   const personalInfo = {
     firstName: document.getElementById("id_first_name").value,
     lastName: document.getElementById("id_last_name").value,
@@ -119,7 +86,7 @@ function handleSubmit(event) {
     zip: document.getElementById("id_zip").value,
   };
 
-  // memasukan items yang dipilih user ke dalam "items"
+  // Memasukkan items yang dipilih user ke dalam "items"
   const itemsTable = document.getElementById("itemsTable").getElementsByTagName('tbody')[0];
   const items = [];
 
@@ -130,33 +97,42 @@ function handleSubmit(event) {
     if (itemsTable.rows[i] && selectElement) {
       const quantityElement = itemsTable.rows[i].cells[1].querySelector("input");
 
-      // Check if the second cell with an input element exists
       if (quantityElement) {
         const productId = selectElement.value;
         const quantity = quantityElement.value;
-        // Find the product in the productsData array based on productId
         const selectedProduct = productsData.find(product => product.id === parseInt(productId));
 
         if (selectedProduct) {
-          // Calculate the total price for this item (product price * quantity)
           const total_price_item = selectedProduct.price * quantity;
-          items.push({ productId, quantity, total_price_item});
+          const item = {
+            productId,
+            quantity,
+            total_price_item,
+          };
+          items.push(item);
         }
       }
     }
   }
 
-  //order object
+  // Order object
   const order = {
     personalInfo,
     items,
   };
 
-  // Log order pada console
-  console.log(order);
+  try {
+    const order_id = await sendOrderToServer(order);
 
-  // Redirect ke home page
-  window.location.href = 'ordersuccess.html';
+    // Log order_id pada console (order_id yang diterima dari server)
+    console.log("Order ID:", order_id);
+
+    // Redirect ke halaman sukses dengan menyertakan order_id
+    window.location.href = `ordersuccess.html?order_id=${order_id}`;
+  } catch (error) {
+    // Handle error, misalnya dengan menampilkan pesan kesalahan kepada pengguna
+    console.error("Failed to send order:", error);
+  }
 }
 
 // event handler untuk submit form
