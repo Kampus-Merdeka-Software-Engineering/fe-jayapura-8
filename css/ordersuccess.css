@@ -35,37 +35,30 @@ p {
   margin-right: 10px;
 }
 
-i {
-color: #555;
-font-size: 80px;
-line-height: 60px;
-margin: 0 auto;
-position: absolute;
-top: 50%;
-left: 50%;
-}
-
 .card {
   background: #f0ecea;
-  padding: 60px;
+  padding: 30px;
   border-radius: 4px;
   box-shadow: 0 2px 3px #C8D0D8;
   display: inline-block;
   border-radius:200px;
-  height:60px;
-  width:60px;
+  height:130px;
+  width:130px;
   margin-top: 25px;
+  text-align: center;
 }
+
+i {
+  color: #555;
+  font-size: 80px;
+  line-height: 60px;
+  }
 
 .checkmark {
   border-radius:400px;
-  height:50px;
-  width:50px;
+  height:40px;
+  width:40px;
   background: transparent;
-  margin: 0 auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
 }
 
 .pi {
