@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
     productsContainer.innerHTML = ""; // Kosongkan container produk
 
     // Fetch data produk dari localhost:3000/products
-    fetch("http://localhost:3000/products")
+    fetch("https://be-jayapura-8-aurevoir.up.railway.app/products")
       .then((response) => response.json())
       .then((data) => {
         const productsData = data.productsData;
