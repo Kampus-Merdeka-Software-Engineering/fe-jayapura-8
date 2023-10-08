@@ -27,30 +27,28 @@ section{
     padding: 1rem 1rem;
 }
 
-.header{
+.navbar-container{
     position: fixed;
-    width: 100%;
-    background-color: #ffffff;
-    z-index: 1;
-}
-
-.header .navbar-container{
     display: flex;
     flex-wrap: wrap;
+    background-color: #ffffff;
     margin: auto;
-}
-
-.header .navbar-container .logo img {
+    width: 100%;
+    z-index: 1;
+  }
+  
+  .logo img{
     margin-top: 20px;
     padding-left: 50px;
     top: 20px;
     left: 82px;
-}
+  }
   
-.header .navbar-container>.menu {
+  .navbar-container>.menu {
     margin-left: auto;
     padding-left: 65px;
     padding-right: 5%;
+    float: right;
     width: 38%;
     display: flex;
     gap: 40px;
@@ -61,21 +59,21 @@ section{
     font-weight: 400;
     justify-content: flex-end;
     align-items: center;
-}
+  }
   
-.header .navbar-container>.menu>a {
+  .navbar-container>.menu>a {
     text-decoration: none;
     color: rgba(0, 0, 0, 1);
     text-shadow: #555;
-}
+  }
   
-.header .navbar-container .menu a.active {
+  .menu a.active {
     background-color: rgba(172, 163, 148, 1);
     color: white;
     font-weight: bold;
     padding: 20px;
     border-radius: 12px;
-}
+  }
 
 .heading{
     padding: 8rem 0;
@@ -91,6 +89,8 @@ section{
 
 .filter-search{
     display: flex;
+    flex-wrap: wrap;
+    margin: auto;
 }
 
 .filter-btns{
@@ -134,7 +134,7 @@ section{
     width: 100%;
 }
 
-.filter-search .search-form{
+.search-form{
     position: relative;
     margin-left: auto;
 }
@@ -161,12 +161,16 @@ section{
 
 .filter-products{
     padding: 1rem;
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    text-align: center;
 }
 
 .filter-products .filter-product{
+    width: 300px;
+    height: 280px;
     background: #fff;
     border-radius: .5rem;
     text-align: center;
@@ -208,37 +212,58 @@ section{
 
 /* For smartphone*/
 @media screen and (max-width: 770px) {
-  .navbar-container {
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 244px;
-      z-index: 2;
-  }
-  
+    .navbar-container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 244px;
+        z-index: 2;
+    }
+    
+    .logo img {
+        margin-top: 20px;
+        justify-content: center;
+        align-items: center;
+    
+    }
+    .navbar-container> .menu{
+        display: flex;
+        gap: 40px;
+        font-size: 20px;
+        font-style: Regular;
+        text-align: left;
+        font-family: Raleway;
+        font-weight: 400;
+        justify-content: flex-end;
+        align-items: center;
+        margin: auto;
+        padding-right: auto;
+        width: auto;
+    }
+    
+    .menu a.active {
+        padding: 10px;
+      }
 
-  .logo img {
-      margin-top: 20px;
-      justify-content: center;
-      align-items: center;
+    .heading{
+        padding: 15rem 0;
+        padding-bottom: 1rem;
+    } 
 
-  }
-  .navbar-container> .menu{
-      display: flex;
-      gap: 40px;
-      font-size: 20px;
-      font-style: Regular;
-      text-align: left;
-      font-family: Raleway;
-      font-weight: 400;
-      justify-content: flex-end;
-      align-items: center;
-      margin: auto;
-      padding-right: auto;
-      width: auto;
-  }
+    .filter-btns{
+        text-align: center;
+        margin: auto;
+        position: relative;
+    }
 
-  .menu a.active {
-      padding: 10px;
-  }
+    .search-form {
+        text-align: center;
+        margin: auto;
+        position: relative;
+    }
+
+    .search-form input#find {
+        width: 100%;
+    }
+
 }
