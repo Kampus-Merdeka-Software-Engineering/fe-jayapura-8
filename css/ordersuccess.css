@@ -17,7 +17,7 @@ body {
 }
 
 h1 {
-  color: #555;
+  color: green;
   font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
   font-weight: 500 bolder;
   font-size: 35px;
@@ -49,10 +49,10 @@ p {
 }
 
 i {
-  color: #555;
+  color: green;
   font-size: 80px;
   line-height: 60px;
-  }
+}
 
 .checkmark {
   border-radius:400px;
@@ -62,7 +62,7 @@ i {
 }
 
 .pi {
-  color: #555;
+  color: green;
   font-weight: bold;
 }
 
