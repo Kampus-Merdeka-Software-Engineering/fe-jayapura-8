@@ -1,91 +1,74 @@
-// Ketika halaman web dimuat
 document.addEventListener("DOMContentLoaded", function () {
   // Seleksi elemen HTML dengan class "filter-products"
   const productsContainer = document.querySelector(".filter-products");
 
-  // Data produk dalam bentuk array objek
-  const productsData = [
-    {
-      id: 1,
-      name: "Beach Shirt #01",
-      imageSrc: "../img/f1.jpg",
-      price: "$15.99",
-      stars: 5,
-      categories: ["all", "best-sellers"],
-    },
-    {
-      id: 2,
-      name: "Beach Shirt #02",
-      imageSrc: "../img/f2.jpg",
-      price: "$13.99",
-      stars: 4.5,
-      categories: ["all", "new"],
-    },
-    {
-      id: 3,
-      name: "Beach Shirt #03",
-      imageSrc: "../img/f3.jpg",
-      price: "$14.99",
-      stars: 4.5,
-      categories: ["all", "new", "best-sellers"],
-    },
-    {
-      id: 4,
-      name: "Beach Shirt #04",
-      imageSrc: "../img/f4.jpg",
-      price: "$14.99",
-      stars: 4.5,
-      categories: ["all", "new", "best-sellers"],
-    },
-    {
-      id: 5,
-      name: "Beach Shirt #05",
-      imageSrc: "../img/f5.jpg",
-      price: "$15.99",
-      stars: 4,
-      categories: ["all", "new"],
-    },
-    {
-      id: 6,
-      name: "Flower Trouser",
-      imageSrc: "../img/f7.jpg",
-      price: "$21.99",
-      stars: 5,
-      categories: ["all", "best-sellers", "specials"],
-    },
-    {
-      id: 7,
-      name: "Windy Shirt",
-      imageSrc: "../img/f8.jpg",
-      price: "$14.99",
-      stars: 5,
-      categories: ["all", "best-sellers", "specials"],
-    },
-    {
-      id: 8,
-      name: "Grey Short Super Fluffy",
-      imageSrc: "../img/n6.jpg",
-      price: "$19.99",
-      stars: 4,
-      categories: ["all", "best-sellers", "specials"],
-    },
-  ];
-
-  // Fetch data untuk header
-// function fetchproductsData() {
-//   fetch('http://localhost:3000/products')
-//       .then(response => response.json())
-//       .then(data => {
-//           const headerElement = document.querySelector('header .filter-products');
-//           headerElement.querySelector('h3').textContent = data.name;
-//           const productsData = data;
-//           // headerElement.querySelector('p').textContent = data.description;
-//       })
-//       .catch(error => console.error('Error fetching header data:', error));
-//       return productsData;
-// }
-
-// document.addEventListener('DOMContentLoaded', fetchproductsData);
+  // // Data produk dalam bentuk array objek
+  // const productsData = [
+  //   {
+  //     id: 1,
+  //     name: "Beach Shirt #01",
+  //     imageSrc: "../img/f1.jpg",
+  //     price: "$15.99",
+  //     stars: 5,
+  //     categories: ["all", "best-sellers"],
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Beach Shirt #02",
+  //     imageSrc: "../img/f2.jpg",
+  //     price: "$13.99",
+  //     stars: 4.5,
+  //     categories: ["all", "new"],
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Beach Shirt #03",
+  //     imageSrc: "../img/f3.jpg",
+  //     price: "$14.99",
+  //     stars: 4.5,
+  //     categories: ["all", "new", "best-sellers"],
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Beach Shirt #04",
+  //     imageSrc: "../img/f4.jpg",
+  //     price: "$14.99",
+  //     stars: 4.5,
+  //     categories: ["all", "new", "best-sellers"],
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Beach Shirt #05",
+  //     imageSrc: "../img/f5.jpg",
+  //     price: "$15.99",
+  //     stars: 4,
+  //     categories: ["all", "new"],
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Flower Trouser",
+  //     imageSrc: "../img/f7.jpg",
+  //     price: "$21.99",
+  //     stars: 5,
+  //     categories: ["all", "best-sellers", "specials"],
+  //   },
+  //   {
+  //     id: 7,
+  //     name: "Windy Shirt",
+  //     imageSrc: "../img/f8.jpg",
+  //     price: "$14.99",
+  //     stars: 5,
+  //     categories: ["all", "best-sellers", "specials"],
+  //   },
+  //   {
+  //     id: 8,
+  //     name: "Grey Short Super Fluffy",
+  //     imageSrc: "../img/n6.jpg",
+  //     price: "$19.99",
+  //     stars: 4,
+  //     categories: ["all", "best-sellers", "specials"],
+  //   },
+  // ];
 
   // Fungsi untuk membuat HTML untuk satu produk
   function createProduct(product) {
@@ -93,10 +76,14 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="filter-product ${product.categories.join(" ")}">
         <img src="${product.imageSrc}" alt="${product.name}">
         <h3>${product.name}</h3>
-        <div class="price">${product.price}</div>
+        <div class="price">$${product.price}</div>
         <div class="stars">
           ${"<i class='fas fa-star'></i>".repeat(Math.floor(product.stars))}
-          ${product.stars % 1 !== 0 ? "<i class='fas fa-star-half-alt'></i>" : ""}
+          ${
+            product.stars % 1 !== 0
+              ? "<i class='fas fa-star-half-alt'></i>"
+              : ""
+          }
         </div>
       </div>
     `;
@@ -104,18 +91,33 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Fungsi untuk menampilkan produk berdasarkan kategori yang dipilih
-  function displayProducts(category) {
+  function displayProducts(category, searchFilter) {
     productsContainer.innerHTML = ""; // Kosongkan container produk
 
-    // Loop melalui data produk
-    // const productsData = fetchproductsData()
-    productsData.forEach((product) => {
-      // Tampilkan produk jika kategori sesuai dengan yang dipilih atau "all"
-      if (category === "all" || product.categories.includes(category)) {
-        const productHTML = createProduct(product);
-        productsContainer.innerHTML += productHTML;
-      }
-    });
+    // Fetch data produk dari localhost:3000/products
+    fetch("https://be-jayapura-8-aurevoir.up.railway.app/products")
+      .then((response) => response.json())
+      .then((data) => {
+        const productsData = data.productsData;
+
+        // Loop melalui data produk
+        productsData.forEach((product) => {
+          // Ambil nama produk dalam huruf kecil untuk pencarian
+          const productName = product.name.toLowerCase();
+          const categoryMatch =
+            category === "all" || product.categories.includes(category);
+          const searchMatch = productName.includes(searchFilter);
+
+          // Tampilkan produk jika sesuai dengan kategori dan pencarian
+          if (categoryMatch && searchMatch) {
+            const productHTML = createProduct(product);
+            productsContainer.innerHTML += productHTML;
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }
 
   // Seleksi semua tombol filter dengan class "filter-btn"
@@ -125,44 +127,38 @@ document.addEventListener("DOMContentLoaded", function () {
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const filterId = button.id; // Dapatkan ID tombol yang diklik
-      displayProducts(filterId); // Tampilkan produk berdasarkan kategori yang dipilih
+      const searchFilter = searchInput.value.trim().toLowerCase(); // Ambil kata kunci pencarian
+
+      // Hapus kelas 'active-btn' dari semua tombol filter
+      resetActiveBtn();
+
+      // Tambahkan kelas 'active-btn' ke tombol yang diklik
+      button.classList.add("active-btn");
+
+      // Tampilkan produk berdasarkan kategori dan pencarian yang dipilih
+      displayProducts(filterId, searchFilter);
     });
   });
 
   // Tampilkan semua produk saat halaman pertama kali dimuat
-  displayProducts("all");
+  displayProducts("all", "");
+
   // Mendapatkan elemen input pencarian
-const searchInput = document.getElementById('find');
+  const searchInput = document.getElementById("find");
 
-// Mendapatkan semua elemen produk
-const allProducts = document.querySelectorAll('.filter-product');
+  // Menambahkan event listener untuk input pencarian saat pengguna mengetik
+  searchInput.addEventListener("input", () => {
+    const filterId = document.querySelector(".active-btn")?.id || "all"; // Dapatkan kategori filter aktif atau "all" jika tidak ada yang aktif
+    const searchFilter = searchInput.value.trim().toLowerCase(); // Ambil kata kunci pencarian
 
-// Menambahkan event listener untuk input pencarian saat pengguna mengetik
-searchInput.addEventListener('input', () => {
-  searchProducts();
-});
-
-// Fungsi untuk melakukan pencarian produk
-function searchProducts() {
-  const filter = searchInput.value.trim().toLowerCase();
-
-  // Iterasi melalui semua elemen produk
-  allProducts.forEach((product) => {
-    const productName = product.querySelector('h3').innerText.toLowerCase();
-
-    // Memeriksa apakah nama produk mengandung kata kunci pencarian
-    if (productName.includes(filter)) {
-      product.style.display = 'block'; // Menampilkan produk jika cocok
-    } else {
-      product.style.display = 'none'; // Menyembunyikan produk jika tidak cocok
-    }
+    // Tampilkan produk berdasarkan kategori dan pencarian yang dipilih
+    displayProducts(filterId, searchFilter);
   });
-}
-});
 
-// Fungsi untuk mereset status aktif pada semua tombol filter
-function resetActiveBtn(){
-  allFilterBtns.forEach((btn) => {
-      btn.classList.remove('active-btn'); // Menghapus kelas 'active-btn' dari semua tombol filter
-  });
-}
+  // Fungsi untuk mereset status aktif pada semua tombol filter
+  function resetActiveBtn() {
+    filterButtons.forEach((btn) => {
+      btn.classList.remove("active-btn");
+    });
+  }
+});

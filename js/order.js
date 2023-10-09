@@ -1,88 +1,15 @@
 const orderForm = document.getElementById("orderForm");
-const productsData = [
-  {
-    id: 1,
-    name: "Beach Shirt #01",
-    imageSrc: "img/f1.jpg",
-    price: "$15.99",
-    stars: 5,
-    categories: ["all", "best-sellers"],
-  },
-  {
-    id: 2,
-    name: "Beach Shirt #02",
-    imageSrc: "img/f2.jpg",
-    price: "$13.99",
-    stars: 4.5,
-    categories: ["all", "new"],
-  },
-  {
-    id: 3,
-    name: "Beach Shirt #03",
-    imageSrc: "img/f3.jpg",
-    price: "$14.99",
-    stars: 4.5,
-    categories: ["all", "new", "best-sellers"],
-  },
-  {
-    id: 4,
-    name: "Beach Shirt #04",
-    imageSrc: "img/f4.jpg",
-    price: "$14.99",
-    stars: 4.5,
-    categories: ["all", "new", "best-sellers"],
-  },
-  {
-    id: 5,
-    name: "Beach Shirt #05",
-    imageSrc: "img/f5.jpg",
-    price: "$15.99",
-    stars: 4,
-    categories: ["all", "new"],
-  },
-  {
-    id: 6,
-    name: "Flower Trouser",
-    imageSrc: "img/f7.jpg",
-    price: "$21.99",
-    stars: 5,
-    categories: ["all", "best-sellers", "specials"],
-  },
-  {
-    id: 7,
-    name: "Windy Shirt",
-    imageSrc: "img/f8.jpg",
-    price: "$14.99",
-    stars: 5,
-    categories: ["all", "best-sellers", "specials"],
-  },
-  {
-    id: 8,
-    name: "Grey Short Super Fluffy",
-    imageSrc: "img/n6.jpg",
-    price: "$19.99",
-    stars: 4,
-    categories: ["all", "best-sellers", "specials"],
-  },
-];
+let productsData = []; // Store product data globally
 
-//Function untuk add row dalam table items yang ingin dibeli user
+// Function to add row to the table
 function addRow() {
   const tableBody = document.querySelector("tbody");
   const newRow = document.createElement("tr");
 
-  // Create an empty string to store the options HTML
-  let optionsHTML = '';
-
-  // Iterate through the productsData array and generate options with 'id' as value
-  for (const product of productsData) {
-    optionsHTML += `<option value="${product.name}">${product.name}</option>`;
-  }
-
   newRow.innerHTML = `
     <td>
       <select class="select-product-ordered" name="product_ordered" class="form-control">
-        ${optionsHTML} <!-- Insert generated options here -->
+        ${generateOptionsHTML()} <!-- Generate options here -->
       </select>
     </td>
     <td>
@@ -94,40 +21,66 @@ function addRow() {
     </td>
   `;
 
-  // newRow.innerHTML = `
-  //   <td>
-  //     <select class="select-product-ordered" name="product_ordered" class="form-control">
-  //       <option value="apple">Apple</option>
-  //       <option value="banana">Banana</option>
-  //       <option value="cherry">Cherry</option>
-  //       <option value="grape">Grape</option>
-  //       <option value="orange">Orange</option>
-  //       <option value="buahbuahbuahbuahhhh">buahbuahbuahbuahhhh</option>
-  //     </select>
-  //   </td>
-  //   <td>
-  //     <input class="form-control" type="number" name="quantity"
-  //       required oninvalid="this.setCustomValidity('Data yang diisikan belum lengkap, silahkan lengkapi terlebih dahulu')" oninput="setCustomValidity('')">
-  //   </td>
-  //   <td>
-  //     <button class="btn btn-danger" onclick="deleteRow(this)">-</button>
-  //   </td>
-  // `;
-
   tableBody.appendChild(newRow);
 }
 
-// Function untuk delete row dari table items yang ingin dibeli user
+// Function to generate options HTML for the select element
+function generateOptionsHTML() {
+  let optionsHTML = '';
+
+  for (const product of productsData) {
+    optionsHTML += `<option value="${product.id}">${product.name}</option>`;
+  }
+
+  return optionsHTML;
+}
+
+// Fetch product data when the page is loaded
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("https://be-jayapura-8-aurevoir.up.railway.app/products")
+    .then((response) => response.json())
+    .then((data) => {
+      productsData = data.productsData; // Store product data globally
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+});
+
+// Function to delete row from the table
 function deleteRow(button) {
   const tableRow = button.parentElement.parentElement;
   tableRow.remove();
 }
 
-// Function untuk handle submisi form (ketika user klik tombol checkout)
-function handleSubmit(event) {
-  event.preventDefault(); // mencegah default form submission
+// Function to send the order to the server
+async function sendOrderToServer(order) {
+  try {
+    const response = await fetch("https://be-jayapura-8-aurevoir.up.railway.app/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(order),
+    });
 
-  // memasukan personal info yang dimasukkan user ke dalam "personalInfo"
+    if (response.ok) {
+      const responseData = await response.json();
+      return responseData.order_id;
+    } else {
+      throw new Error("Failed to create order on the server");
+    }
+  } catch (error) {
+    console.error("Error sending order:", error);
+    throw error;
+  }
+}
+
+// Function to handle form submission (when user clicks the checkout button)
+async function handleSubmit(event) {
+  event.preventDefault(); // Prevent default form submission
+
+  // Get personal info entered by the user
   const personalInfo = {
     firstName: document.getElementById("id_first_name").value,
     lastName: document.getElementById("id_last_name").value,
@@ -139,38 +92,53 @@ function handleSubmit(event) {
     zip: document.getElementById("id_zip").value,
   };
 
-  // memasukan items yang dipilih user ke dalam "items"
+  // Get items selected by the user
   const itemsTable = document.getElementById("itemsTable").getElementsByTagName('tbody')[0];
   const items = [];
 
   for (let i = 0; i < itemsTable.rows.length; i++) {
     const selectElement = itemsTable.rows[i].cells[0].querySelector("select");
 
-    // Check if the row and the first cell with a select element exist
-    if (itemsTable.rows[i] && selectElement) {
+    if (selectElement) {
       const quantityElement = itemsTable.rows[i].cells[1].querySelector("input");
 
-      // Check if the second cell with an input element exists
       if (quantityElement) {
-        const productName = selectElement.value;
+        const productId = selectElement.value;
         const quantity = quantityElement.value;
-        items.push({ productName, quantity });
+        const selectedProduct = productsData.find(product => product.id === parseInt(productId));
+
+        if (selectedProduct) {
+          const total_price_item = selectedProduct.price * quantity;
+          const item = {
+            productId,
+            quantity,
+            total_price_item,
+          };
+          items.push(item);
+        }
       }
     }
   }
 
-  //order object
+  // Create the order object
   const order = {
     personalInfo,
     items,
   };
 
-  // Log order pada console
-  console.log(order);
+  try {
+    const order_id = await sendOrderToServer(order);
 
-  // Redirect ke home page
-//   window.location.href = 'index.html';
+    // Log order_id to the console (order_id received from the server)
+    console.log("Order ID:", order_id);
+
+    // Redirect to the success page with the order_id
+    window.location.href = `ordersuccess.html?order_id=${order_id}`;
+  } catch (error) {
+    // Handle error, for example, by displaying an error message to the user
+    console.error("Failed to send order:", error);
+  }
 }
 
-// event handler untuk submit form
+// Add an event listener for form submission
 orderForm.addEventListener("submit", handleSubmit);
