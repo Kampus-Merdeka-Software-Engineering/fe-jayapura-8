@@ -24,7 +24,7 @@ body{
 }
 
 section{
-    padding: 1rem 1rem;
+    padding: 1rem 2rem;
 }
 
 .navbar-container{
@@ -35,14 +35,14 @@ section{
     margin: auto;
     width: 100%;
     z-index: 1;
-  }
+}
   
   .logo img{
     margin-top: 20px;
     padding-left: 50px;
     top: 20px;
     left: 82px;
-  }
+}
   
   .navbar-container>.menu {
     margin-left: auto;
@@ -59,21 +59,21 @@ section{
     font-weight: 400;
     justify-content: flex-end;
     align-items: center;
-  }
+}
   
-  .navbar-container>.menu>a {
+.navbar-container>.menu>a {
     text-decoration: none;
     color: rgba(0, 0, 0, 1);
     text-shadow: #555;
-  }
+}
   
-  .menu a.active {
+.menu a.active {
     background-color: rgba(172, 163, 148, 1);
     color: white;
     font-weight: bold;
     padding: 20px;
     border-radius: 12px;
-  }
+}
 
 .heading{
     padding: 8rem 0;
@@ -91,10 +91,6 @@ section{
     display: flex;
     flex-wrap: wrap;
     margin: auto;
-}
-
-.filter-btns{
-    text-align: center;
 }
 
 .filter-btn{
@@ -123,13 +119,16 @@ section{
 .filter-btn:hover{
     color: #555;
 }
+
 .filter-btn:hover::after{
     width: 100%;
 }
+
 /* active button */
 .active-btn{
     color: #555;
 }
+
 .active-btn::after{
     width: 100%;
 }
@@ -140,23 +139,23 @@ section{
 }
 
 .search-form input#find {
-  width: 450px;
-  padding: 6px;
-  margin-top: 8px;
-  background-color: #f0ecea;
-  padding-left: 45px;
-  border-radius: 62px;
-  font-size: 17px;
-  border: solid;
-  color: #555;
-  font-family: 'Poppins', sans-serif;
+    width: 350px;
+    padding: 6px;
+    margin-top: 8px;
+    background-color: #f0ecea;
+    padding-left: 45px;
+    border-radius: 62px;
+    font-size: 17px;
+    border: solid;
+    color: #555;
+    font-family: 'Poppins', sans-serif;
 }
 
 .search-form .icon-search {
-  position: absolute;
-  margin-left: 17px;
-  margin-top: 22px;
-  color: #4f5b66;
+    position: absolute;
+     margin-left: 17px;
+    margin-top: 22px;
+    color: #4f5b66;
 }
 
 .filter-products{
@@ -210,6 +209,29 @@ section{
     padding: .5rem 0;
 }
 
+/* Untuk tablet dan layar yang lebih kecil */
+@media screen and (max-width: 1024px) {
+    .filter-btns {
+        text-align: center;
+        margin: auto;
+    }
+    
+    .search-form {
+        text-align: center;
+        margin: auto;
+    }
+
+    .search-form input#find {
+        width: 100%;
+    }
+
+    .filter-products {
+        padding: 1rem 0;
+        gap: 20px;
+    }
+
+}
+
 /* For smartphone*/
 @media screen and (max-width: 770px) {
     .navbar-container {
@@ -243,7 +265,7 @@ section{
     
     .menu a.active {
         padding: 10px;
-      }
+    }
 
     .heading{
         padding: 15rem 0;
@@ -253,17 +275,21 @@ section{
     .filter-btns{
         text-align: center;
         margin: auto;
-        position: relative;
     }
 
     .search-form {
         text-align: center;
         margin: auto;
-        position: relative;
     }
 
     .search-form input#find {
         width: 100%;
     }
 
+    .filter-products {
+        padding: 1rem 0;
+        gap: 20px;
+    }
+
 }
+
