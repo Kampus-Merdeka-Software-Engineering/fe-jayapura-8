@@ -1,4 +1,4 @@
-:root{
+:root {
     --orange:#ff7800;
     --black:#130f40;
     --light-color:#666;
@@ -8,7 +8,7 @@
     --outline-hover: .2rem solid var(--black);
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
     outline: none; border: none;
@@ -16,18 +16,18 @@
     text-transform: capitalize;
 }
 
-body{
+body {
     background-color: #f0ecea;
     min-height: 100vh;
     width: 100%;
     height: 100%;
 }
 
-section{
+section {
     padding: 1rem 1rem;
 }
 
-.navbar-container{
+.navbar-container {
     position: fixed;
     display: flex;
     flex-wrap: wrap;
@@ -37,7 +37,7 @@ section{
     z-index: 1;
 }
   
-  .logo img{
+  .logo img {
     margin-top: 20px;
     padding-left: 50px;
     top: 20px;
@@ -75,25 +75,25 @@ section{
     border-radius: 12px;
 }
 
-.heading{
+.heading {
     padding: 8rem 0;
     padding-bottom: 2rem;
 }
 
-.heading h1{
+.heading h1 {
     text-align: center;
     font-size: 3.5rem;
     color: var(--black);
     font-family: 'Poppins', sans-serif;
 }
 
-.filter-search{
+.filter-search {
     display: flex;
     flex-wrap: wrap;
     margin: auto;
 }
 
-.filter-btn{
+.filter-btn {
     background: none;
     cursor: pointer;
     border: none;
@@ -106,7 +106,7 @@ section{
     position: relative;
 }
 
-.filter-btn::after{
+.filter-btn::after {
     content: "";
     position: absolute;
     top: 110%;
@@ -116,24 +116,24 @@ section{
     background-color: #555;
 }
 
-.filter-btn:hover{
+.filter-btn:hover {
     color: #555;
 }
 
-.filter-btn:hover::after{
+.filter-btn:hover::after {
     width: 100%;
 }
 
 /* active button */
-.active-btn{
+.active-btn {
     color: #555;
 }
 
-.active-btn::after{
+.active-btn::after {
     width: 100%;
 }
 
-.search-form{
+.search-form {
     position: relative;
     margin-left: auto;
 }
@@ -158,7 +158,7 @@ section{
     color: #4f5b66;
 }
 
-.filter-products{
+.filter-products {
     padding: 1rem;
     display: flex;
     flex-wrap: wrap;
@@ -167,7 +167,7 @@ section{
     text-align: center;
 }
 
-.filter-products .filter-product{
+.filter-products .filter-product { 
     width: 240px;
     height: 280px;
     background: #fff;
@@ -180,30 +180,30 @@ section{
     transition: .2s linear;
 }
 
-.filter-products .filter-product:hover{
+.filter-products .filter-product:hover {
     outline-offset: 0rem;
     outline: var(--outline-hover);
 }
 
-.filter-products .filter-product img{
+.filter-products .filter-product img {
     max-width: 100%;
     height: 10rem;
 }
 
-.filter-products h3{
+.filter-products h3 {
     font-size: 1.5rem;
     color: var(--black);
     font-family: "Poppins", sans-serif;
 }
 
-.filter-products .filter-product .price{
+.filter-products .filter-product .price {
     font-size: 1.5rem;
     color: var(--light-color);
     padding: .5rem 0;
     font-family: "Poppins", sans-serif;
 }
 
-.filter-products .filter-product .stars i{
+.filter-products .filter-product .stars i {
     font-size: 1rem;
     color: var(--orange);
     padding: .5rem 0;
@@ -242,7 +242,7 @@ section{
         align-items: center;
     
     }
-    .navbar-container> .menu{
+    .navbar-container> .menu {
         display: flex;
         gap: 40px;
         font-size: 20px;
@@ -261,16 +261,16 @@ section{
         padding: 10px;
     }
 
-    .heading{
+    .heading {
         padding: 15rem 0;
         padding-bottom: 1rem;
     }
 
-    .heading h1{
+    .heading h1 {
         font-size: 2.5rem;
     }
 
-    .filter-btns{
+    .filter-btns {
         text-align: center;
         margin: auto;
     }
